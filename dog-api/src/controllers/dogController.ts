@@ -29,26 +29,29 @@ export const getDogById = async (req: Request, res: Response): Promise<void> => 
 export const createDog = async (req: Request, res: Response): Promise<void> => {
   try {
     const { nome, raca, peso, idade, proprietario, name, breed, weight, age, owner } = req.body as any;
-    const foto = (req as any).file?.filename || null;
+    const filename = (req as any).file?.filename || null;
 
-    const finalName = name ?? nome;
-    const finalBreed = breed ?? raca;
-    const finalWeight = typeof weight !== 'undefined' ? weight : peso;
-    const finalAge = typeof age !== 'undefined' ? age : idade;
-    const finalOwner = owner ?? proprietario;
+    const finalNome = nome ?? name;
+    const finalRaca = raca ?? breed;
+    const finalPeso = typeof peso !== 'undefined' ? peso : weight;
+    const finalIdade = typeof idade !== 'undefined' ? idade : age;
+    const finalProprietario = proprietario ?? owner;
 
-    if (!finalName || !finalBreed || finalWeight === undefined || finalAge === undefined || !finalOwner || !foto) {
+    if (!finalNome || !finalRaca || finalPeso === undefined || finalIdade === undefined || !finalProprietario || !filename) {
       res.status(400).json({ message: 'Todos os campos são obrigatórios (nome, raca, peso, idade, proprietario, foto)' });
       return;
     }
 
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const fotoUrl = `${baseUrl}/uploads/${filename}`;
+
     const newDog = new Dog({
-      name: finalName,
-      breed: finalBreed,
-      weight: Number(finalWeight),
-      age: Number(finalAge),
-      owner: finalOwner,
-      foto,
+      nome: finalNome,
+      raca: finalRaca,
+      peso: Number(finalPeso),
+      idade: Number(finalIdade),
+      proprietario: finalProprietario,
+      fotoUrl,
     });
 
     const savedDog = await newDog.save();
@@ -63,15 +66,18 @@ export const createDog = async (req: Request, res: Response): Promise<void> => {
 export const updateDog = async (req: Request, res: Response): Promise<void> => {
   try {
     const { nome, raca, peso, idade, proprietario, name, breed, weight, age, owner } = req.body as any;
-    const foto = (req as any).file?.filename;
+    const filename = (req as any).file?.filename;
 
     const updateData: Partial<IDog> & { [key: string]: any } = {};
-    if (nome || name) updateData.name = name ?? nome;
-    if (raca || breed) updateData.breed = breed ?? raca;
-    if (typeof peso !== 'undefined' || typeof weight !== 'undefined') updateData.weight = Number(weight ?? peso);
-    if (typeof idade !== 'undefined' || typeof age !== 'undefined') updateData.age = Number(age ?? idade);
-    if (proprietario || owner) updateData.owner = owner ?? proprietario;
-    if (foto) updateData.foto = foto;
+    if (nome || name) updateData.nome = nome ?? name;
+    if (raca || breed) updateData.raca = raca ?? breed;
+    if (typeof peso !== 'undefined' || typeof weight !== 'undefined') updateData.peso = Number(peso ?? weight);
+    if (typeof idade !== 'undefined' || typeof age !== 'undefined') updateData.idade = Number(idade ?? age);
+    if (proprietario || owner) updateData.proprietario = proprietario ?? owner;
+    if (filename) {
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      updateData.fotoUrl = `${baseUrl}/uploads/${filename}`;
+    }
 
     const updatedDog = await Dog.findByIdAndUpdate(
       req.params.id,

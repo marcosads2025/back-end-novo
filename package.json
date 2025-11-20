@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev src/index.ts",
-    "build": "tsc"
+    "dev": "npm --prefix ./dog-api run dev",
+    "build": "npm --prefix ./dog-api run build",
+    "start": "npm --prefix ./dog-api run start",
+    "dev:frontend": "npm --prefix ./dog-api-frontend start"
   },
   "keywords": [],
   "author": "",

@@ -19,8 +19,7 @@ const Cadastro = () => {
   const [success, setSuccess] = useState(''); // Estado para mensagem de sucesso
   const navigate = useNavigate();
 
-  const API_URL = `${process.env.REACT_APP_API_URL || 'http://localhost:3000'}/api/dogs`;
-
+  const API_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api/dogs` : '/api/dogs';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,9 +60,7 @@ const Cadastro = () => {
 
     try {
       setSubmitting(true);
-      await axios.post(API_URL, dataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      await axios.post(API_URL, dataToSend);
 
       setSuccess('Cadastro realizado com sucesso! Redirecionando...');
       
@@ -76,8 +73,9 @@ const Cadastro = () => {
       }, 2000);
 
     } catch (err) {
-      console.error('Erro ao cadastrar cachorro:', err.response || err.message);
-      setError('Erro ao cadastrar. Verifique se o backend está rodando.');
+      const serverMsg = err?.response?.data?.message || err?.message || '';
+      console.error('Erro ao cadastrar cachorro:', err?.response || err?.message);
+      setError(`Erro ao cadastrar. ${serverMsg ? `Detalhes: ${serverMsg}` : 'Verifique se o backend está rodando.'}`);
     } finally {
       setSubmitting(false);
     }

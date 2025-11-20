@@ -1,24 +1,24 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IDog extends Document {
-  name: string;
-  breed: string;
-  age: number;
-  weight: number;
-  owner?: string;
-  foto: string;
+  nome: string;
+  raca: string;
+  idade: number;
+  peso: number;
+  proprietario?: string;
+  fotoUrl: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const DogSchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
-    breed: { type: String, required: true },
-    age: { type: Number, required: true },
-    weight: { type: Number, required: true },
-    owner: { type: String },
-    foto: { type: String, required: true }
+    nome: { type: String, required: true },
+    raca: { type: String, required: true },
+    idade: { type: Number, required: true },
+    peso: { type: Number, required: true },
+    proprietario: { type: String },
+    fotoUrl: { type: String, required: true }
   },
   { timestamps: true }
 );

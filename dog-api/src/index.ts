@@ -18,7 +18,7 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Servir arquivos de imagem enviados
+// Servir arquivos de imagem enviados (project-root/uploads)
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Conectar ao MongoDB
