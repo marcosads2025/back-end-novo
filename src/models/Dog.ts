@@ -1,21 +1,34 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-export interface IDog extends Document {
-  name: string;
-  breed: string;
-  age: number;
-  description?: string;
-  imageUrl?: string;
-}
-
-const DogSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  breed: { type: String, required: true },
-  age: { type: Number, required: true },
-  description: { type: String },
-  imageUrl: { type: String }
+const DogSchema = new mongoose.Schema({
+  nome: { 
+    type: String, 
+    required: true 
+  },
+  raca: { 
+    type: String, 
+    required: true 
+  },
+  idade: { 
+    type: Number, 
+    required: true 
+  },
+  // Campos opcionais que vimos no Controller:
+  peso: { 
+    type: Number 
+  },
+  proprietario: { 
+    type: String 
+  },
+  description: { 
+    type: String 
+  },
+  // IMPORTANTE: No controller chamamos de 'fotoUrl', aqui tem que ser igual
+  fotoUrl: { 
+    type: String 
+  }
 }, {
-  timestamps: true
+  timestamps: true // Cria automaticamente createdAt e updatedAt
 });
 
-export default mongoose.model<IDog>('Dog', DogSchema);
+export default mongoose.model('Dog', DogSchema);
