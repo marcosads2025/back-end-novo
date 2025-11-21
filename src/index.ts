@@ -1,62 +1,57 @@
-// index.js
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import dogRoutes from './routes/dogRoutes.js'; // ⚠️ garantir extensão .js se estiver compilado
-import './config/db.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dogRoutes from './routes/dogRoutes.js'; 
+import './config/db.js'; // Conecta ao banco ao iniciar
 
-// Configuração do ambiente
+// Configuração de caminhos para ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config();
-const PORT = process.env.PORT || 3000; // ✅ Render define automaticamente a porta
+const PORT = process.env.PORT || 3000;
 
-// Inicializar app
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: '*', // ou defina seu domínio do frontend: https://og-api-frontend.onrender.com
-}));
-app.use(express.json());
+// --- MIDDLEWARES ---
+app.use(cors({ origin: '*' })); 
+app.use(express.json()); // ESSENCIAL PARA O POST FUNCIONAR
 app.use(express.urlencoded({ extended: true }));
 
-// Configuração do Swagger
+// --- SWAGGER CONFIG ---
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'API de Cães',
       version: '1.0.0',
-      description: 'API para gerenciamento de informações sobre cães',
-      contact: {
-        name: 'Suporte API',
-        email: 'suporte@dogapi.com',
-      },
+      description: 'API Dog Documentation',
     },
     servers: [
       {
-        url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`, // ✅ Corrigido para Render
-        description: 'Servidor de Produção ou Desenvolvimento',
+        url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`,
       },
     ],
   },
-  apis: ['./routes/*.js'], // ✅ caminho ajustado
+  apis: [path.join(__dirname, './routes/*.js')], // Caminho absoluto para evitar erro no Render
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rotas principais
+// --- ROTAS ---
 app.use('/api/dogs', dogRoutes);
 
-// Rota padrão
+// Rota Raiz
 app.get('/', (req, res) => {
-  res.send('🐶 Bem-vindo à API de Cães! Acesse /api-docs para ver a documentação.');
+  res.json({ status: 'API Online 🐶', docs: '/api-docs' });
 });
 
-// Inicializar servidor
+// --- START ---
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📘 Swagger disponível em: ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}/api-docs`);
 });
