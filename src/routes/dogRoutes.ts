@@ -1,13 +1,19 @@
 import { Router } from 'express';
-// IMPORTANTE: Importando o configurador de upload (Multer)
-import upload from '../config/multer'; 
+import multer from 'multer'; // Importamos o multer diretamente
+// IMPORTANTE: Adicionado a extensão .js no final (obrigatório no Render)
 import { 
-  getAllDogs, 
+  getDogs,      // Confirme se no seu controller o nome é getDogs ou getAllDogs
   getDogById, 
   createDog, 
   updateDog, 
   deleteDog 
-} from '../controllers/dogController';
+} from '../controllers/dogController.js'; 
+
+// --- CONFIGURAÇÃO DE UPLOAD (MULTER) ---
+// Configurado aqui mesmo para evitar erros de importação de arquivos externos
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+// ---------------------------------------
 
 const router = Router();
 
@@ -18,36 +24,25 @@ const router = Router();
  * Dog:
  * type: object
  * required:
- * - name
- * - breed
- * - age
+ * - nome
+ * - raca
+ * - idade
  * properties:
- * _id:
+ * id:
  * type: string
  * description: ID automático gerado pelo MongoDB
- * name:
+ * nome:
  * type: string
  * description: Nome do cão
- * breed:
+ * raca:
  * type: string
  * description: Raça do cão
- * age:
+ * idade:
  * type: number
  * description: Idade do cão
- * description:
+ * image:
  * type: string
- * description: Descrição do cão
- * imageUrl:
- * type: string
- * description: URL da imagem do cão
- * createdAt:
- * type: string
- * format: date
- * description: Data de criação do registro
- * updatedAt:
- * type: string
- * format: date
- * description: Data da última atualização
+ * description: Nome do arquivo da imagem (se houver)
  */
 
 /**
@@ -66,7 +61,7 @@ const router = Router();
  * items:
  * $ref: '#/components/schemas/Dog'
  */
-router.get('/', getAllDogs);
+router.get('/', getDogs);
 
 /**
  * @swagger
@@ -106,11 +101,11 @@ router.get('/:id', getDogById);
  * schema:
  * type: object
  * properties:
- * name:
+ * nome:
  * type: string
- * breed:
+ * raca:
  * type: string
- * age:
+ * idade:
  * type: number
  * image:
  * type: string
@@ -121,7 +116,7 @@ router.get('/:id', getDogById);
  * 400:
  * description: Dados inválidos
  */
-// CORREÇÃO AQUI: Adicionado upload.single('image')
+// CORREÇÃO: upload.single('image') processa a imagem antes de ir para o controller
 router.post('/', upload.single('image'), createDog);
 
 /**
@@ -138,17 +133,16 @@ router.post('/', upload.single('image'), createDog);
  * required: true
  * description: ID do cão
  * requestBody:
- * required: true
  * content:
  * multipart/form-data:
  * schema:
  * type: object
  * properties:
- * name:
+ * nome:
  * type: string
- * breed:
+ * raca:
  * type: string
- * age:
+ * idade:
  * type: number
  * image:
  * type: string
@@ -159,7 +153,6 @@ router.post('/', upload.single('image'), createDog);
  * 404:
  * description: Cão não encontrado
  */
-// CORREÇÃO AQUI: Adicionado upload.single('image') para permitir trocar a foto
 router.put('/:id', upload.single('image'), updateDog);
 
 /**
