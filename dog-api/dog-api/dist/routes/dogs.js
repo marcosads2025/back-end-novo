@@ -1,9 +1,17 @@
 import { Router } from "express";
-import { getRandomDog, getBreedDog, saveFavoriteDog, getFavoriteDogs } from "../controllers/dogsController";
+import { 
+  getRandomDog, 
+  getBreedDog, 
+  saveFavoriteDog, 
+  getFavoriteDogs 
+} from "../controllers/dogsController.js";
+
 const router = Router();
+
 // ================================
 // ENDPOINTS DA API DE CACHORROS
 // ================================
+
 /**
  * @swagger
  * /dogs/random:
@@ -26,6 +34,7 @@ const router = Router();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/random", getRandomDog);
+
 /**
  * @swagger
  * /dogs/breed/{breed}:
@@ -62,6 +71,7 @@ router.get("/random", getRandomDog);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/breed/:breed", getBreedDog);
+
 /**
  * @swagger
  * /dogs/favorite:
@@ -103,6 +113,7 @@ router.get("/breed/:breed", getBreedDog);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/favorite", saveFavoriteDog);
+
 /**
  * @swagger
  * /dogs/favorites:
@@ -125,4 +136,5 @@ router.post("/favorite", saveFavoriteDog);
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/favorites", getFavoriteDogs);
+
 export default router;
