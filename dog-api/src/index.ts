@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import connectDB from "./db";
+import connectDB from "./db.js";
 import dogRoutes from "./routes/dogRoutes";
 import swaggerSpec from "./config/swagger";
 import path from "path";
