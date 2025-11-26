@@ -6,19 +6,25 @@ import connectDB from "./db";
 import dogRoutes from "./routes/dogRoutes";
 import swaggerSpec from "./config/swagger";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Corrigir __dirname em módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Carregar variáveis de ambiente
 dotenv.config();
 
 // Inicializar app Express
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+const PORT = process.env.PORT || "3000"; // Render exige string
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Servir arquivos de imagem enviados (project-root/uploads)
+
+// Servir arquivos de imagem enviados
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Conectar ao MongoDB
@@ -38,7 +44,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Inicialização do servidor
-app.listen(PORT, () => {
+app.listen(parseInt(PORT), () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`📘 Documentação Swagger: http://localhost:${PORT}/api-docs`);
 });
