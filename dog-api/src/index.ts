@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import connectDB from "./db.js";
 import dogRoutes from "./routes/dogRoutes.js";
-import swaggerSpec from "./config/swagger";
+import swaggerSpec from "./config/swagger.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
