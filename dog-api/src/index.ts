@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import connectDB from "./db.js";
-import dogRoutes from "./routes/dogRoutes";
+import dogRoutes from "./routes/dogRoutes.js";
 import swaggerSpec from "./config/swagger";
 import path from "path";
 import { fileURLToPath } from "url";
