@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Dog, { IDog } from '../models/Dog';
+import Dog, { IDog } from '../models/Dog.js';
 
 // Obter todos os cachorros
 export const getAllDogs = async (req: Request, res: Response): Promise<void> => {
