@@ -2,9 +2,6 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import connectDB from "./db.js";
-import dogRoutes from "./routes/dogRoutes.js";
-import swaggerSpec from "./config/swagger.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -14,6 +11,11 @@ const __dirname = path.dirname(__filename);
 
 // Carregar variáveis de ambiente
 dotenv.config();
+
+// Imports locais com extensão .js (obrigatório com ES Modules)
+import connectDB from "./db.js";
+import dogRoutes from "./routes/dogRoutes.js";
+import swaggerSpec from "./config/swagger.js";
 
 // Inicializar app Express
 const app = express();
