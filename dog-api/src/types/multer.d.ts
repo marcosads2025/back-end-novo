@@ -1,1 +1,1 @@
-declare module 'multer';
+import multer
