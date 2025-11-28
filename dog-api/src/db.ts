@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 
 // Carrega .env explicitamente da raiz do pacote (dog-api/.env)
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
+=======
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dog-api';
+// Carrega variáveis locais quando rodando em dev.
+// Na Render, use o painel de variáveis de ambiente.
+dotenv.config();
+>>>>>>> a36e4c952b0d6396d9615345715500cf70460595
 
+const MONGO_URI = process.env.MONGO_URI || "";
+
+<<<<<<< HEAD
 // Log controlado do URI (ofusca credenciais) para depuração
 (() => {
   try {
@@ -39,5 +49,18 @@ const connectDB = async (): Promise<void> => {
   }
   console.error('Não foi possível conectar ao MongoDB após múltiplas tentativas. Verifique a variável MONGO_URI.');
 };
+=======
+export default async function connectDB(): Promise<void> {
+  if (!MONGO_URI) {
+    throw new Error("MONGO_URI não definida nas variáveis de ambiente.");
+  }
+>>>>>>> a36e4c952b0d6396d9615345715500cf70460595
 
-export default connectDB;
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log("✅ Conectado ao MongoDB");
+  } catch (err) {
+    console.error("❌ Erro ao conectar ao MongoDB:", err);
+    throw err;
+  }
+}

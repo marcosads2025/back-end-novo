@@ -5,8 +5,8 @@ import {
   createDog, 
   updateDog, 
   deleteDog 
-} from '../controllers/dogController';
-import { upload } from '../config/multer';
+} from '../controllers/dogController.js';
+import { upload } from '../config/multer.js';
 
 const router = Router();
 
