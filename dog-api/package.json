@@ -31,11 +31,3 @@
     "typescript": "^5.9.2"
   }
 }
-    "@types/mongoose": "^5.11.97",
->>>>>>> a36e4c952b0d6396d9615345715500cf70460595
-    "@types/node": "^24.5.2",
-    "@types/pg": "^8.15.5",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
-  }
-}
