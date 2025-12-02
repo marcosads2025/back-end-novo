@@ -27,7 +27,7 @@ const ListaDogs = () => {
 
   useEffect(() => {
     loadDogs();
-  }, []);
+  }, [loadDogs]);
 
   const startEdit = (dog) => {
     setEditingId(dog._id);

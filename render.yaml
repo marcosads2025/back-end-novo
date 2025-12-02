@@ -1,8 +1,14 @@
 services:
   - type: web
-    name: dog-api-backend
+    name: dog-api
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: |
+      npm install
+      npm run build
+      cd dog-api-frontend
+      npm install
+      npm run build
+      cd ..
     startCommand: npm start
     autoDeploy: true
     plan: free
@@ -11,3 +17,5 @@ services:
         fromSecret: MONGO_URI
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000

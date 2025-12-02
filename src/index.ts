@@ -4,8 +4,14 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dogRoutes from './routes/dogRoutes.js'; // ⚠️ garantir extensão .js se estiver compilado
 import './config/db.js';
+
+// Configuração para __dirname em módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Configuração do ambiente
 dotenv.config();
@@ -47,13 +53,24 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rotas principais
+// Rotas da API
 app.use('/api/dogs', dogRoutes);
 
-// Rota padrão
-app.get('/', (req, res) => {
-  res.send('🐶 Bem-vindo à API de Cães! Acesse /api-docs para ver a documentação.');
-});
+// Servir arquivos estáticos do frontend em produção
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, '../../dog-api-frontend/build')));
+  
+  // Rota para todas as outras requisições retornarem o index.html do frontend
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../../dog-api-frontend/build', 'index.html'));
+  });
+} else {
+  // Rota padrão para desenvolvimento
+  app.get('/', (req, res) => {
+    res.send('🐶 Bem-vindo à API de Cães! Acesse /api-docs para ver a documentação.');
+  });
+}
 
 // Inicializar servidor
 app.listen(PORT, () => {
